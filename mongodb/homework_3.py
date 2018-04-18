@@ -47,7 +47,7 @@ print()
 result = collection.aggregate([
     {"$unwind": "$countries"}, 
     {"$match": {"countries": "Hungary", "rated": "Pending rating"}}, 
-    {"$group": {"_id": {"country": "$countries", "rating": "$rated"}, "count": {"$sum": 1}}}
+    {"$group": {"_id": {"country": "$countries", "rated": "$rated"}, "count": {"$sum": 1}}}
     ])
 print("Part D")
 print(list(result))
