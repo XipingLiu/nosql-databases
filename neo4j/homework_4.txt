@@ -1,7 +1,104 @@
 // The scenario you have used for your schema is:
-
+// I am modeling my own family.
 
 // This is an example. Your own commands should *not* be commented out so we can pipe the file into the cypher-shell.
 // If you'd like to test your commands, you can run 'cat homework_4.txt | cypher-shell -u neo4j -p test' from
 // the vagrant box command line. Make sure neo4j is running first.
 // CREATE (a:person { name: 't' });
+
+
+// commands to create each node with their labels and property pairs:
+CREATE (n:Person { name: 'Deng' });
+CREATE (n:Person { name: 'Qing' });
+CREATE (n:Person { name: 'Xiao' });
+CREATE (n:Person { name: 'Ji' });
+CREATE (n:Person { name: 'Jian' });
+CREATE (n:Person { name: 'Xi' });
+CREATE (n:Person { name: 'Xiping' });
+CREATE (n:Car { brand: 'Porsche', model: 'Panamera' });
+
+
+// commands to create the relationships, 5 of which must include the property pair:
+MATCH (a:Person),(b:Person)
+WHERE a.name = 'Deng' AND b.name = 'Qing'
+CREATE (a)-[r:MARRIED_TO]->(b);
+
+MATCH (a:Person),(b:Person)
+WHERE a.name = 'Qing' AND b.name = 'Deng'
+CREATE (a)-[r:MARRIED_TO]->(b);
+
+MATCH (a:Person),(b:Person)
+WHERE a.name = 'Xiao' AND b.name = 'Ji'
+CREATE (a)-[r:MARRIED_TO]->(b);
+
+MATCH (a:Person),(b:Person)
+WHERE a.name = 'Ji' AND b.name = 'Xiao'
+CREATE (a)-[r:MARRIED_TO]->(b);
+
+MATCH (a:Person),(b:Person)
+WHERE a.name = 'Jian' AND b.name = 'Xi'
+CREATE (a)-[r:MARRIED_TO]->(b);
+
+MATCH (a:Person),(b:Person)
+WHERE a.name = 'Xi' AND b.name = 'Jian'
+CREATE (a)-[r:MARRIED_TO]->(b);
+
+MATCH (a:Person),(b:Person)
+WHERE a.name = 'Deng' AND b.name = 'Jian'
+CREATE (a)-[r:FATHER_OF]->(b);
+
+MATCH (a:Person),(b:Person)
+WHERE a.name = 'Jian' AND b.name = 'Deng'
+CREATE (a)-[r:SON_OF]->(b);
+
+MATCH (a:Person),(b:Person)
+WHERE a.name = 'Qing' AND b.name = 'Jian'
+CREATE (a)-[r:MOTHER_OF]->(b);
+
+MATCH (a:Person),(b:Person)
+WHERE a.name = 'Jian' AND b.name = 'Qing'
+CREATE (a)-[r:SON_OF]->(b);
+
+MATCH (a:Person),(b:Person)
+WHERE a.name = 'Xiao' AND b.name = 'Xi'
+CREATE (a)-[r:FATHER_OF]->(b);
+
+MATCH (a:Person),(b:Person)
+WHERE a.name = 'Xi' AND b.name = 'Xiao'
+CREATE (a)-[r:DAUGHTER_OF]->(b);
+
+MATCH (a:Person),(b:Person)
+WHERE a.name = 'Ji' AND b.name = 'Xi'
+CREATE (a)-[r:MOTHER_OF]->(b);
+
+MATCH (a:Person),(b:Person)
+WHERE a.name = 'Xi' AND b.name = 'Ji'
+CREATE (a)-[r:DAUGHTER_OF]->(b);
+
+MATCH (a:Person),(b:Person)
+WHERE a.name = 'Jian' AND b.name = 'Xiping'
+CREATE (a)-[r:FATHER_OF { since: '07/12/1995' }]->(b);
+
+MATCH (a:Person),(b:Person)
+WHERE a.name = 'Xiping' AND b.name = 'Jian'
+CREATE (a)-[r:SON_OF { since: '07/12/1995' }]->(b);
+
+MATCH (a:Person),(b:Person)
+WHERE a.name = 'Xi' AND b.name = 'Xiping'
+CREATE (a)-[r:MOTHER_OF { since: '07/12/1995' }]->(b);
+
+MATCH (a:Person),(b:Person)
+WHERE a.name = 'Xiping' AND b.name = 'Xi'
+CREATE (a)-[r:SON_OF { since: '07/12/1995' }]->(b);
+
+MATCH (a:Person),(b:Car)
+WHERE a.name = 'Jian' AND b.brand = 'Porsche'
+CREATE (a)-[r:OWNS { since: '03/12/2012' }]->(b);
+
+
+// 2 commands to query for a subgraph:
+MATCH (:Person { name: 'Jian' })-[r:OWNS]->(car)
+RETURN car.model, type(r);
+
+MATCH (:Person { name: 'Xi' })-[r]->(person)
+RETURN person.name, type(r);
